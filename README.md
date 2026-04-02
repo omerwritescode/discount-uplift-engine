@@ -273,5 +273,5 @@ Run the pipeline by executing all cells in `test3_X-Learner.ipynb` in order. The
 
 ## 👥 Authors
 
-Group project — MSc Data Science, NMIMS NSOMASA  
-Subject: Research Discourse (RD), Semester II
+Omer Raza
+Arfeen Khan

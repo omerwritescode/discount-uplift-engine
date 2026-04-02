@@ -273,5 +273,4 @@ Run the pipeline by executing all cells in `test3_X-Learner.ipynb` in order. The
 
 ## 👥 Authors
 
-Omer Raza
-Arfeen Khan
+Omer Raza | Arfeen Khan

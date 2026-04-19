@@ -57,12 +57,12 @@ Raw Sessions (12,330)
   └── Lost Causes   → won't buy regardless             → no discount needed
         │
         ▼
-┌─────────────────────────────────────────────┐
-│  3. Profit Optimization (Stage 2)           │
-│  Discount tiers: 0% / 5% / 10% / 15% / 20% │
+┌──────────────────────────────────────────────────────┐
+│  3. Profit Optimization (Stage 2)                    │
+│  Discount tiers: 0% / 5% / 10% / 15% / 20%           │
 │  E[Profit] = P(buy|disc) × (GM − disc$) − offer_cost │
 │  Argmax over tiers → optimal discount/customer       │
-└─────────────────────────────────────────────┘
+└──────────────────────────────────────────────────────┘
         │
         ▼
 ┌──────────────────────────┐

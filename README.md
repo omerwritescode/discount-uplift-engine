@@ -1,13 +1,13 @@
 # 🎯 discount-uplift-engine
 
-> *Who deserves a discount — and how much?*  
+> *Who deserves a discount - and how much?*  
 > A two-stage causal ML pipeline that identifies discount-responsive customers and assigns personalized, profit-maximizing offers using uplift modeling and expected utility optimization.
 
 ---
 
 ## 📌 Overview
 
-E-commerce platforms routinely apply **uniform discounts** across all customers — ignoring the fact that some customers will buy regardless (wasted margin), some will never buy no matter the offer (wasted spend), and only a targeted subset genuinely change their behavior in response to a discount.
+E-commerce platforms routinely apply **uniform discounts** across all customers, ignoring the fact that some customers will buy regardless (wasted margin), some will never buy no matter the offer (wasted spend), and only a targeted subset genuinely change their behavior in response to a discount.
 
 This project builds a **Personalized Discount Prediction Pipeline** that solves all three problems at once:
 
@@ -17,7 +17,7 @@ This project builds a **Personalized Discount Prediction Pipeline** that solves 
 | **Stage 2** | *How much* discount? | Expected Profit Maximization |
 | **Evaluation** | Does it actually work? | Qini Curve + Monte Carlo A/B Simulation |
 
-**Dataset:** [Online Shoppers Purchasing Intention](https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset) — Sakar & Kastro (2019), 12,330 e-commerce sessions.
+**Dataset:** [Online Shoppers Purchasing Intention](https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset) - Sakar & Kastro (2019), 12,330 e-commerce sessions.
 
 ---
 
@@ -80,19 +80,19 @@ Raw Sessions (12,330)
 
 ## 🔬 Methods in Detail
 
-### Uplift Modeling — The Core Idea
+### Uplift Modeling - The Core Idea
 
-Standard classification models predict *P(buy)*. Uplift models predict *P(buy | discount) − P(buy | no discount)* — the **causal effect** of giving a discount to a specific customer. This is the Individual Treatment Effect (ITE).
+Standard classification models predict *P(buy)*. Uplift models predict *P(buy | discount) - P(buy | no discount)* - the **causal effect** of giving a discount to a specific customer. This is the Individual Treatment Effect (ITE).
 
 **Treatment assignment** (observational proxy, since no A/B column exists in the dataset):
-- Treated: `New_Visitor` OR `SpecialDay > 0` — customers who likely encountered a promotional signal
+- Treated: `New_Visitor` OR `SpecialDay > 0` - customers who likely encountered a promotional signal
 - Control: Returning visitors on non-special days
 
 #### T-Learner (Künzel et al., 2019)
-Train two separate GBMs — one on treated customers, one on control. Apply both to every customer and subtract predictions:
+Train two separate GBMs: one on treated customers, one on control. Apply both to every customer and subtract predictions:
 
 ```
-uplift = model_treated.predict(x) − model_control.predict(x)
+uplift = model_treated.predict(x) - model_control.predict(x)
 ```
 
 Each model is trained on an 80% split and calibrated on the held-out 20% using **Isotonic Regression** (Niculescu-Mizil & Caruana, 2005) to correct GBM's known probability overconfidence.
@@ -101,12 +101,12 @@ Each model is trained on an 80% split and calibrated on the held-out 20% using *
 Designed for imbalanced treatment/control splits (ours: 23.6% / 76.4%). Adds two extra steps:
 
 1. Compute **imputed treatment effects** per customer using the opposite group's model:
-   - `D_T = actual_outcome − model_control.predict(x)` for treated customers
-   - `D_C = model_treated.predict(x) − actual_outcome` for control customers
+   - `D_T = actual_outcome - model_control.predict(x)` for treated customers
+   - `D_C = model_treated.predict(x) - actual_outcome` for control customers
 2. Train two **tau regressors** (`GradientBoostingRegressor`) to predict these effects
 3. Combine: `uplift_x = g × tau_t(x) + (1−g) × tau_c(x)`, where `g = P(treatment)` is the empirical propensity score
 
-The weighted combination gives more influence to the larger control-side estimate — a principled correction for group imbalance.
+The weighted combination gives more influence to the larger control-side estimate, i.e., a principled correction for group imbalance.
 
 **Winner is selected automatically** by Qini coefficient before Stage 2.
 
@@ -114,7 +114,7 @@ The weighted combination gives more influence to the larger control-side estimat
 
 ### Probability Calibration
 
-Raw GBM outputs are not well-calibrated probabilities — the model optimizes ranking (AUC), not calibration. This causes the profit formula to multiply by inflated numbers.
+Raw GBM outputs are not well-calibrated probabilities. The model optimizes ranking (AUC), and not calibration. This causes the profit formula to multiply by inflated numbers.
 
 Fix: `CalibratedClassifierCV` with `method='isotonic'` fits a monotone non-parametric correction on held-out data (`cv='prefit'`). After calibration:
 
@@ -251,7 +251,7 @@ Install:
 pip install pandas numpy scikit-learn matplotlib seaborn
 ```
 
-Run the pipeline by executing all cells in `test3_X-Learner.ipynb` in order. The dataset CSV must be in the same directory.
+Run the pipeline by executing all cells in `X-Learner.ipynb` in order. The dataset CSV must be in the same directory.
 
 ---
 

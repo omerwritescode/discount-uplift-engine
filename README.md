@@ -239,11 +239,11 @@ discount-uplift-engine/
 
 ```
 python >= 3.9
-pandas
-numpy
-scikit-learn >= 1.2
-matplotlib
-seaborn
+pandas>=1.5.0
+numpy>=1.23.0
+matplotlib>=3.6.0
+seaborn>=0.12.0
+scikit-learn>=1.2.0
 ```
 
 Install:

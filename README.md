@@ -1,6 +1,6 @@
 # 🎯 discount-uplift-engine
 
-> *Who deserves a discount - and how much?*  
+> *Who deserves a discount, and how much?*  
 > A two-stage causal ML pipeline that identifies discount-responsive customers and assigns personalized, profit-maximizing offers using uplift modeling and expected utility optimization.
 
 ---
